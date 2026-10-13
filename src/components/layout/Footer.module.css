@@ -1,0 +1,125 @@
+.footer {
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  padding-top: clamp(3.5rem, 2rem + 3vw, 5rem);
+  padding-bottom: 2.5rem;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 3fr);
+  gap: clamp(2rem, 1rem + 3vw, 4rem);
+  padding-bottom: clamp(2.5rem, 1.5rem + 2vw, 3.5rem);
+  border-bottom: 1px solid var(--line);
+}
+
+.brandCol {
+  display: grid;
+  gap: 16px;
+  max-width: 42ch;
+}
+
+.about {
+  color: var(--body);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+}
+
+.navTitle {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.links {
+  display: grid;
+  gap: 10px;
+}
+
+.links a {
+  color: var(--body);
+  font-size: var(--fs-small);
+  text-decoration: none;
+  transition: color var(--dur) var(--ease-out);
+}
+
+.links a:hover {
+  color: var(--blue-dark);
+}
+
+.socialList {
+  display: grid;
+  gap: 10px;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--body);
+  font-size: var(--fs-small);
+  text-decoration: none;
+  transition: color var(--dur) var(--ease-out);
+}
+
+.socialLink:hover {
+  color: var(--blue-dark);
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 24px;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+.copyright {
+  margin: 0;
+}
+
+.legal {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.legalLink {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.legalLink:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
+.backToTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--dur) var(--ease-out);
+}
+
+.backToTop:hover {
+  color: var(--blue-dark);
+}
+
+@media (max-width: 768px) {
+  .top {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,167 @@
+.section {
+  padding-top: 0;
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(2rem, 1rem + 4vw, 5rem);
+  align-items: center;
+  padding: clamp(32px, 1.5rem + 4vw, 80px);
+  border-radius: 24px;
+  background: var(--blue-50);
+  border: 1px solid var(--blue-100);
+}
+
+.copy {
+  display: grid;
+  gap: 24px;
+  justify-items: start;
+}
+
+.copy :global(.lead) {
+  color: #3b4a63;
+}
+
+.segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--blue-dark);
+}
+
+.fronts {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.fronts li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.fronts svg {
+  flex: none;
+  margin-top: 4px;
+  color: var(--blue);
+}
+
+/* Jornada */
+.journey {
+  margin: 0;
+  padding: 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md), 0 0 0 1px rgba(30, 58, 138, 0.08);
+}
+
+.journeyHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.journeyTitle {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--blue-50);
+  color: var(--blue-dark);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.journeySteps {
+  position: relative;
+}
+
+.journeySteps::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 22px;
+  bottom: 22px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--blue-100), var(--blue));
+}
+
+.journeySteps li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 0;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.dot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--blue-200);
+}
+
+.journeySteps li:nth-child(2) .dot {
+  border-color: #93b4f5;
+}
+.journeySteps li:nth-child(3) .dot {
+  border-color: #6f9af2;
+}
+.journeySteps li:nth-child(4) .dot {
+  border-color: #4a7fef;
+}
+
+.last {
+  font-weight: 600 !important;
+  color: var(--blue-dark) !important;
+}
+
+.last .dot {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.caption {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .panel {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+  .copy > a {
+    width: 100%;
+  }
+}

@@ -1,0 +1,19 @@
+# Dependências e build
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Variáveis de ambiente locais (nunca versionar IDs privados)
+.env
+.env.local
+.env.*.local
+
+# Sistema
+.DS_Store
+Thumbs.db
+npm-debug.log*
+
+# Impeccable (arquivos locais da máquina)
+.impeccable/config.local.json

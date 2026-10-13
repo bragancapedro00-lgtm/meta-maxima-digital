@@ -1,0 +1,33 @@
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.42em;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.digital {
+  font-weight: 500;
+  color: var(--blue);
+}
+
+.light {
+  color: var(--white);
+}
+
+.image {
+  height: 32px;
+  width: auto;
+}
+
+@media (max-width: 380px) {
+  .wordmark {
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+  }
+}

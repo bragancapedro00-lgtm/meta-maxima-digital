@@ -1,0 +1,55 @@
+.button {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px 12px 14px;
+  border-radius: 999px;
+  background: #25d366;
+  color: var(--white);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4), 0 2px 4px rgba(17, 24, 39, 0.1);
+  text-decoration: none;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out), background-color 220ms var(--ease-out);
+  animation: popIn 300ms var(--ease-out);
+}
+
+.button:hover {
+  background: #20ba5a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5), 0 3px 6px rgba(17, 24, 39, 0.12);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.label {
+  white-space: nowrap;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .label {
+    display: none;
+  }
+  .button {
+    padding: 14px;
+    right: 16px;
+    bottom: 20px;
+  }
+}

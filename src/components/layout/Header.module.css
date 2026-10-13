@@ -1,0 +1,139 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: saturate(1.6) blur(12px);
+  -webkit-backdrop-filter: saturate(1.6) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color var(--dur) var(--ease-out),
+    background-color var(--dur) var(--ease-out);
+}
+
+.scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom-color: var(--line);
+}
+
+.bar {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition:
+    color var(--dur) var(--ease-out),
+    background-color var(--dur) var(--ease-out);
+}
+
+.link:hover {
+  color: var(--blue-dark);
+  background: var(--blue-50);
+}
+
+.toggle {
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink);
+}
+
+.toggle:hover {
+  background: var(--blue-50);
+}
+
+.panel {
+  border-top: 1px solid var(--line);
+  background: var(--white);
+  padding: 8px 0 24px;
+  box-shadow: 0 24px 40px -24px rgba(17, 24, 39, 0.25);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.panelLinks {
+  margin-bottom: 16px;
+}
+
+.panelLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.panelLink svg {
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .panel[data-open="true"] {
+    animation: drop 320ms var(--ease-out);
+  }
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 900px) {
+  .nav {
+    display: none;
+  }
+  .toggle {
+    display: grid;
+  }
+}
+
+@media (min-width: 901px) {
+  .panel {
+    display: none !important;
+  }
+}

@@ -1,0 +1,131 @@
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(2.5rem, 1rem + 5vw, 6rem);
+  align-items: start;
+}
+
+.intro {
+  position: sticky;
+  top: calc(var(--header-h) + 48px);
+  display: grid;
+  gap: 24px;
+}
+
+/* Linha vertical "quebrada": cada card é um ponto onde a oportunidade escapa */
+.leaks {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  padding-left: 36px;
+}
+
+.leaks::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--line-strong) 0 10px,
+    transparent 10px 18px
+  );
+}
+
+.card {
+  position: relative;
+  padding: 26px 28px 28px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--line);
+  transition:
+    box-shadow var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--blue-100);
+}
+
+.marker {
+  position: absolute;
+  left: -36px;
+  top: 30px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--line-strong);
+}
+
+.card:hover .marker {
+  border-color: var(--blue);
+}
+
+.stage {
+  margin-bottom: 10px;
+  color: var(--blue-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.6875rem;
+}
+
+.text {
+  margin-top: 8px;
+  color: var(--body);
+  max-width: 52ch;
+}
+
+.closing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin-top: clamp(3.5rem, 2rem + 4vw, 6rem);
+  padding-top: clamp(2rem, 1rem + 2vw, 3rem);
+  border-top: 1px solid var(--line-strong);
+}
+
+.closingText {
+  max-width: 30ch;
+  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .intro {
+    position: static;
+  }
+  .closing {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .leaks {
+    padding-left: 28px;
+  }
+  .marker {
+    left: -28px;
+    width: 14px;
+    height: 14px;
+  }
+  .leaks::before {
+    left: 6px;
+  }
+  .card {
+    padding: 22px 20px 24px;
+  }
+  .closing > a {
+    width: 100%;
+  }
+}

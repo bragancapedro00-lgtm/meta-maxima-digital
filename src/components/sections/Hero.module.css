@@ -1,0 +1,129 @@
+.hero {
+  position: relative;
+  padding-top: calc(var(--header-h) + clamp(2.5rem, 1rem + 5vw, 5.5rem));
+  padding-bottom: clamp(4rem, 2rem + 6vw, 7.5rem);
+  background:
+    radial-gradient(60% 55% at 82% 38%, var(--blue-50) 0%, rgba(239, 246, 255, 0) 70%),
+    linear-gradient(180deg, var(--white) 0%, var(--white) 70%, var(--paper) 100%);
+  overflow: clip;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 1rem + 5vw, 5rem);
+  align-items: center;
+}
+
+.copy {
+  max-width: 620px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  padding: 6px 14px 6px 10px;
+  border: 1px solid var(--blue-100);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--blue-dark);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-100);
+}
+
+.title {
+  margin-bottom: 24px;
+}
+
+.subtitle {
+  margin-bottom: 32px;
+}
+
+.benefits {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.benefits li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.benefitIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--blue-50);
+  color: var(--blue);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.micro {
+  max-width: 50ch;
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.visual {
+  position: relative;
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .copy {
+    max-width: 680px;
+  }
+  .visual {
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 560px) {
+  .badge {
+    margin-bottom: 22px;
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .actions > a {
+    width: 100%;
+  }
+  .benefits li {
+    align-items: flex-start;
+  }
+  .benefitIcon {
+    margin-top: -6px;
+  }
+}
