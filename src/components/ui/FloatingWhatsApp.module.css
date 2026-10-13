@@ -1,16 +1,18 @@
 .button {
   position: fixed;
-  right: 20px;
-  bottom: 24px;
+  right: calc(20px + env(safe-area-inset-right, 0px));
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   z-index: 40;
   display: flex;
   align-items: center;
   gap: 10px;
+  min-height: 48px;
+  min-width: 48px;
   padding: 12px 18px 12px 14px;
   border-radius: 999px;
-  background: #25d366;
-  color: var(--white);
-  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4), 0 2px 4px rgba(17, 24, 39, 0.1);
+  background: #128c7e;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(18, 140, 126, 0.35), 0 2px 4px rgba(17, 24, 39, 0.1);
   text-decoration: none;
   font-size: var(--fs-small);
   font-weight: 600;
@@ -19,9 +21,9 @@
 }
 
 .button:hover {
-  background: #20ba5a;
+  background: #075e54;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5), 0 3px 6px rgba(17, 24, 39, 0.12);
+  box-shadow: 0 6px 20px rgba(7, 94, 84, 0.45), 0 3px 6px rgba(17, 24, 39, 0.15);
 }
 
 .button:active {
@@ -44,12 +46,14 @@
 }
 
 @media (max-width: 640px) {
+  .button {
+    padding: 12px;
+    border-radius: 50%;
+    right: calc(16px + env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+
   .label {
     display: none;
-  }
-  .button {
-    padding: 14px;
-    right: 16px;
-    bottom: 20px;
   }
 }

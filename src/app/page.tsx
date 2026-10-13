@@ -1,46 +1,30 @@
 import { Hero } from "@/components/sections/Hero";
 import { Problem } from "@/components/sections/Problem";
-import { Solutions } from "@/components/sections/Solutions";
-import { Differential } from "@/components/sections/Differential";
-import { HowItWorks } from "@/components/sections/HowItWorks";
-import { Education } from "@/components/sections/Education";
-import { Profiles } from "@/components/sections/Profiles";
+import { Method } from "@/components/sections/Method";
+import { CaseStudy } from "@/components/sections/CaseStudy";
 import { Faq } from "@/components/sections/Faq";
 import { LeadForm } from "@/components/sections/LeadForm";
-import { FinalCta } from "@/components/sections/FinalCta";
 
 export default function HomePage() {
   return (
     <>
-      {/* Seção 2: Hero Principal */}
+      {/* SEÇÃO 1 — HERO */}
       <Hero />
 
-      {/* Seção 3: Identificação do Problema */}
+      {/* SEÇÃO 2 — PROBLEMA */}
       <Problem />
 
-      {/* Seção 4: Apresentação das Soluções */}
-      <Solutions />
+      {/* SEÇÃO 3 — MÉTODO */}
+      <Method />
 
-      {/* Seção 5: Diferencial Estratégico */}
-      <Differential />
+      {/* SEÇÃO 4 — PROVA REAL */}
+      <CaseStudy />
 
-      {/* Seção 6: Como Funciona */}
-      <HowItWorks />
-
-      {/* Seção 7: Foco no Setor Educacional */}
-      <Education />
-
-      {/* Seção 8: Perfil dos Clientes */}
-      <Profiles />
-
-      {/* Seção 9: Perguntas Frequentes */}
+      {/* SEÇÃO 5 — OBJEÇÕES E FAQ */}
       <Faq />
 
-      {/* Seção 10: Formulário Final de Conversão */}
+      {/* SEÇÃO 6 — CTA FINAL E FORMULÁRIO */}
       <LeadForm />
-
-      {/* Seção 11: Chamada Final */}
-      <FinalCta />
     </>
   );
 }

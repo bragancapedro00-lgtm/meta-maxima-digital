@@ -1,17 +1,10 @@
-import { LEAD_ORIGIN, WHATSAPP_NUMBER, isWhatsAppConfigured } from "@/config/site";
+import { WHATSAPP_NUMBER, isWhatsAppConfigured } from "@/config/site";
 
 export type LeadData = {
   nome: string;
   whatsapp: string;
-  empresa: string;
   segmento: string;
-  objetivo: string;
-  situacao: string;
-  faturamento: string;
-  desafio: string;
 };
-
-const NOT_INFORMED = "não informado";
 
 /**
  * Normaliza um telefone brasileiro digitado pelo visitante.
@@ -56,45 +49,46 @@ export function maskPhoneInput(raw: string): string {
 
 const clean = (v: string) => v.replace(/\s+/g, " ").trim();
 
-/** Monta a mensagem comercial com as respostas reais do formulário. */
-export function buildLeadMessage(
-  data: LeadData,
-  campaign?: Record<string, string>,
-): string {
-  const phone = normalizeBrazilianPhone(data.whatsapp);
-  const desafio = data.desafio.trim().replace(/\n{3,}/g, "\n\n");
+/**
+ * Monta a mensagem comercial para WhatsApp no modelo exato homologado:
+ *
+ * Olá, equipe da Meta Máxima Digital! Quero solicitar meu diagnóstico estratégico gratuito.
+ * Nome: [NOME]
+ * WhatsApp: [WHATSAPP]
+ * Segmento: [SEGMENTO]
+ * Gostaria de entender como melhorar a captação e a conversão de oportunidades comerciais no meu negócio.
+ */
+export function buildLeadMessage(data: LeadData): string {
+  const normalized = normalizeBrazilianPhone(data.whatsapp);
+  const formattedPhone = normalized ? formatBrazilianPhone(normalized) : clean(data.whatsapp);
 
-  const lines = [
-    "NOVO LEAD | META MÁXIMA DIGITAL",
+  return [
+    "Olá, equipe da Meta Máxima Digital! Quero solicitar meu diagnóstico estratégico gratuito.",
     "",
     `Nome: ${clean(data.nome)}`,
-    `WhatsApp: ${phone ? formatBrazilianPhone(phone) : clean(data.whatsapp)}`,
-    `Empresa: ${clean(data.empresa)}`,
-    `Segmento: ${data.segmento}`,
-    `Objetivo principal: ${data.objetivo}`,
-    `Situação atual: ${data.situacao}`,
-    `Faturamento mensal: ${data.faturamento || NOT_INFORMED}`,
-    `Principal desafio: ${desafio || NOT_INFORMED}`,
+    `WhatsApp: ${formattedPhone}`,
+    `Segmento: ${clean(data.segmento)}`,
     "",
-    `Origem: ${LEAD_ORIGIN}`,
-  ];
-
-  // Parâmetros de campanha (utm_*) ajudam a atribuir o lead ao anúncio de origem.
-  // Identificadores de clique (fbclid/gclid) ficam fora da mensagem por serem longos e técnicos.
-  const utmEntries = Object.entries(campaign ?? {}).filter(([k, v]) => k.startsWith("utm_") && v);
-  if (utmEntries.length) {
-    lines.push(`Campanha: ${utmEntries.map(([k, v]) => `${k}=${v}`).join(" | ")}`);
-  }
-
-  return lines.join("\n");
+    "Gostaria de entender como melhorar a captação e a conversão de oportunidades comerciais no meu negócio.",
+  ].join("\n");
 }
 
 /**
  * Link oficial wa.me com a mensagem codificada.
  * No celular abre o aplicativo; no computador, o wa.me oferece WhatsApp Desktop ou WhatsApp Web.
- * Retorna null quando o número comercial não está configurado (nunca gera link inválido).
+ * Retorna null quando o número comercial não está configurado.
  */
 export function buildWhatsAppUrl(message: string, number: string = WHATSAPP_NUMBER): string | null {
   if (!isWhatsAppConfigured(number)) return null;
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
+
+/**
+ * Link direto wa.me para o botão flutuante oficial (sem preenchimento prévio de formulário).
+ */
+export function buildDirectWhatsAppUrl(number: string = WHATSAPP_NUMBER): string | null {
+  const directMessage =
+    "Olá, equipe da Meta Máxima Digital! Gostaria de conversar sobre o diagnóstico estratégico gratuito para minha escola/empresa.";
+  return buildWhatsAppUrl(directMessage, number);
+}
+

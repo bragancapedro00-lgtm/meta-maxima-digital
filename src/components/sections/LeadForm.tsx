@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, useId } from "react";
-import { FORM, SEGMENT_SCHOOL } from "@/content/landing";
+import { useState, useId } from "react";
+import Link from "next/link";
+import { FORM } from "@/content/landing";
 import { Icon } from "@/components/ui/Icon";
-import { FORM_ANCHOR, PRESELECT_EVENT } from "@/components/ui/ScrollCta";
+import { FORM_ANCHOR } from "@/components/ui/ScrollCta";
 import { WHATSAPP_NUMBER, isWhatsAppConfigured, PRIVACY_POLICY_URL } from "@/config/site";
 import {
   maskPhoneInput,
@@ -12,23 +13,21 @@ import {
   buildWhatsAppUrl,
   type LeadData,
 } from "@/lib/whatsapp";
-import { getCampaignParams } from "@/lib/campaign";
 import { track } from "@/lib/analytics";
 import styles from "./LeadForm.module.css";
 
-type FormErrors = Partial<Record<keyof LeadData, string>>;
+type FormErrors = {
+  nome?: string;
+  whatsapp?: string;
+  segmento?: string;
+};
 
 export function LeadForm() {
   const formId = useId();
   const [formData, setFormData] = useState<LeadData>({
     nome: "",
     whatsapp: "",
-    empresa: "",
     segmento: "",
-    objetivo: "",
-    situacao: "",
-    faturamento: "",
-    desafio: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -36,28 +35,11 @@ export function LeadForm() {
   const [submittedMessage, setSubmittedMessage] = useState<string | null>(null);
   const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-  const [configPending, setConfigPending] = useState(false);
 
-  // Escuta evento de pré-seleção (ex.: botão da seção de educação)
-  useEffect(() => {
-    const handlePreselect = (e: Event) => {
-      const customEvent = e as CustomEvent<{ segment: string }>;
-      if (customEvent.detail?.segment) {
-        setFormData((prev) => ({ ...prev, segmento: customEvent.detail.segment }));
-      }
-    };
-
-    window.addEventListener(PRESELECT_EVENT, handlePreselect);
-    return () => window.removeEventListener(PRESELECT_EVENT, handlePreselect);
-  }, []);
-
-  const handleChange = (
-    field: keyof LeadData,
-    value: string
-  ) => {
+  const handleChange = (field: keyof LeadData, value: string) => {
     if (!hasStarted) {
       setHasStarted(true);
-      track("form_start", { first_field: field });
+      track("form_start");
     }
 
     if (field === "whatsapp") {
@@ -66,7 +48,6 @@ export function LeadForm() {
 
     setFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Limpa erro do campo ao digitar/selecionar
     if (errors[field]) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -80,9 +61,9 @@ export function LeadForm() {
     const newErrors: FormErrors = {};
 
     if (!formData.nome.trim()) {
-      newErrors.nome = "Por favor, informe seu nome completo.";
+      newErrors.nome = "Por favor, informe seu nome.";
     } else if (formData.nome.trim().length < 3) {
-      newErrors.nome = "Por favor, informe um nome válido.";
+      newErrors.nome = "Por favor, informe um nome válido (mínimo 3 caracteres).";
     }
 
     const normalizedPhone = normalizeBrazilianPhone(formData.whatsapp);
@@ -92,20 +73,8 @@ export function LeadForm() {
       newErrors.whatsapp = "Digite um número com DDD válido (ex.: (21) 98439-3482).";
     }
 
-    if (!formData.empresa.trim()) {
-      newErrors.empresa = "Por favor, informe o nome da sua empresa.";
-    }
-
     if (!formData.segmento) {
-      newErrors.segmento = "Selecione o segmento do seu negócio.";
-    }
-
-    if (!formData.objetivo) {
-      newErrors.objetivo = "Selecione seu objetivo principal.";
-    }
-
-    if (!formData.situacao) {
-      newErrors.situacao = "Selecione a situação atual do seu marketing.";
+      newErrors.segmento = "Selecione o segmento da sua empresa.";
     }
 
     setErrors(newErrors);
@@ -115,25 +84,19 @@ export function LeadForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    track("form_submit_attempt", {
-      segment: formData.segmento || "unselected",
-      objective: formData.objetivo || "unselected",
-    });
+    track("form_submit_attempt");
 
     if (!validate()) {
-      // Foca no primeiro campo com erro
-      const firstErrorField = Object.keys(errors)[0] || "nome";
+      const firstErrorField = (Object.keys(errors)[0] as keyof LeadData) || "nome";
       const el = document.getElementById(`${formId}-${firstErrorField}`);
       el?.focus();
       return;
     }
 
-    const campaign = getCampaignParams();
-    const message = buildLeadMessage(formData, campaign as Record<string, string>);
+    const message = buildLeadMessage(formData);
     setSubmittedMessage(message);
 
     if (!isWhatsAppConfigured()) {
-      setConfigPending(true);
       return;
     }
 
@@ -141,13 +104,12 @@ export function LeadForm() {
     setWhatsappUrl(url);
 
     if (url) {
-      track("whatsapp_open", {
+      // Dispara o evento oficial 'lead' no Meta Pixel apenas após validação estrita
+      track("lead", {
         segment: formData.segmento,
-        objective: formData.objetivo,
-        has_campaign: Object.keys(campaign).length > 0,
       });
 
-      // Abre WhatsApp em nova aba mantendo segurança
+      // Abre WhatsApp em nova aba com parâmetros de segurança
       window.open(url, "_blank", "noopener,noreferrer");
     }
   };
@@ -158,9 +120,7 @@ export function LeadForm() {
       await navigator.clipboard.writeText(submittedMessage);
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
-    } catch {
-      // Falha silenciosa no clipboard se bloqueado
-    }
+    } catch {}
   };
 
   return (
@@ -169,311 +129,182 @@ export function LeadForm() {
         <div className={styles.wrapper}>
           <div className={styles.intro}>
             <span className={styles.badge}>
-              <Icon name="route" size={16} />
-              Conversa Estratégica
+              <Icon name="target" size={16} />
+              Diagnóstico Estratégico Gratuito
             </span>
             <h2 id="form-heading" className={`h2 ${styles.title}`}>
-              Vamos entender como sua empresa <span className="accent">pode vender mais.</span>
+              {FORM.title}
             </h2>
             <p className="lead">{FORM.subtitle}</p>
 
             <div className={styles.stepsGuide}>
-              <p className={styles.guideTitle}>O que acontece depois de preencher:</p>
+              <p className={styles.guideTitle}>Como funciona o próximo passo:</p>
               <ol className={styles.guideList}>
-                {FORM.nextSteps.map((s, idx) => (
-                  <li key={s.title}>
-                    <span className={styles.guideStepNum}>{idx + 1}</span>
-                    <div>
-                      <strong>{s.title}:</strong> <span>{s.text}</span>
-                    </div>
-                  </li>
-                ))}
+                <li>
+                  <span className={styles.guideNum}>1</span>
+                  <span>Você preenche seu nome, WhatsApp com DDD e segmento.</span>
+                </li>
+                <li>
+                  <span className={styles.guideNum}>2</span>
+                  <span>O link abre uma conversa no WhatsApp com uma mensagem pronta preenchida.</span>
+                </li>
+                <li>
+                  <span className={styles.guideNum}>3</span>
+                  <span>Você confirma o envio dentro do WhatsApp para iniciar a conversa com a equipe.</span>
+                </li>
               </ol>
             </div>
           </div>
 
           <div className={styles.card}>
             {submittedMessage && (
-              <div className={styles.confirmationBox} role="alert">
+              <div className={styles.confirmationBox} role="alert" aria-live="polite">
                 <div className={styles.confirmHeader}>
-                  <Icon name="check" size={24} className={styles.checkIcon} />
+                  <div className={styles.confirmIconWrap}>
+                    <Icon name="check" size={20} strokeWidth={2.5} />
+                  </div>
                   <div>
-                    <h3 className={styles.confirmTitle}>Dados prontos com sucesso!</h3>
+                    <h3 className={styles.confirmTitle}>WhatsApp aberto com sua mensagem!</h3>
                     <p className={styles.confirmDesc}>
-                      {configPending
-                        ? "O formulário está validado, mas o número de WhatsApp comercial da agência está em fase de configuração pendente."
-                        : FORM.success}
+                      Sua mensagem foi formatada. Lembre-se de tocar em <strong>Enviar</strong> no seu WhatsApp para falar com a equipe.
                     </p>
                   </div>
                 </div>
 
-                {!configPending && whatsappUrl && (
-                  <div className={styles.confirmActions}>
+                <div className={styles.previewBox}>
+                  <p className={styles.previewLabel}>Pré-visualização da mensagem:</p>
+                  <pre className={styles.previewText}>{submittedMessage}</pre>
+                </div>
+
+                <div className={styles.confirmActions}>
+                  {whatsappUrl && (
                     <a
                       href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn--primary btn--block"
-                      onClick={() =>
-                        track("whatsapp_open", {
-                          type: "reopen",
-                          segment: formData.segmento,
-                        })
-                      }
+                      className="btn btn--primary"
                     >
-                      <Icon name="whatsapp" size={20} />
-                      Confirmar envio no WhatsApp
+                      <Icon name="whatsapp" size={18} />
+                      <span>Abrir conversa no WhatsApp</span>
                     </a>
-                  </div>
-                )}
-
-                <div className={styles.messagePreview}>
-                  <div className={styles.previewTop}>
-                    <span className="mono">Mensagem gerada:</span>
-                    <button
-                      type="button"
-                      onClick={handleCopyMessage}
-                      className={styles.copyBtn}
-                      aria-label="Copiar mensagem para a área de transferência"
-                    >
-                      <Icon name={copied ? "check" : "copy"} size={14} />
-                      {copied ? "Copiada!" : "Copiar texto"}
-                    </button>
-                  </div>
-                  <pre className={styles.previewText}>{submittedMessage}</pre>
+                  )}
+                  <button
+                    type="button"
+                    onClick={handleCopyMessage}
+                    className="btn btn--secondary"
+                  >
+                    <Icon name={copied ? "check" : "copy"} size={16} />
+                    <span>{copied ? "Mensagem copiada!" : "Copiar texto da mensagem"}</span>
+                  </button>
                 </div>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} noValidate className={styles.form}>
-              <div className={styles.formGrid}>
-                {/* 1. Nome completo */}
+            {!submittedMessage && (
+              <form onSubmit={handleSubmit} noValidate className={styles.form}>
+                {/* Campo 1: Nome */}
                 <div className={styles.field}>
                   <label htmlFor={`${formId}-nome`} className={styles.label}>
-                    Nome completo <span className={styles.required}>*</span>
+                    Nome completo <span className={styles.req} aria-hidden="true">*</span>
                   </label>
                   <input
                     id={`${formId}-nome`}
-                    type="text"
                     name="nome"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    placeholder="Seu nome ou como prefere ser chamado"
                     value={formData.nome}
                     onChange={(e) => handleChange("nome", e.target.value)}
-                    placeholder="Seu nome completo"
-                    className={`${styles.input} ${errors.nome ? styles.hasError : ""}`}
-                    aria-required="true"
                     aria-invalid={!!errors.nome}
-                    aria-describedby={errors.nome ? `${formId}-err-nome` : undefined}
+                    aria-describedby={errors.nome ? `${formId}-nome-error` : undefined}
+                    className={`${styles.input} ${errors.nome ? styles.inputError : ""}`}
                   />
                   {errors.nome && (
-                    <span id={`${formId}-err-nome`} className={styles.errorText} role="alert">
+                    <p id={`${formId}-nome-error`} className={styles.errorText} role="alert">
+                      <Icon name="alert" size={14} />
                       {errors.nome}
-                    </span>
+                    </p>
                   )}
                 </div>
 
-                {/* 2. WhatsApp com DDD */}
+                {/* Campo 2: WhatsApp com DDD */}
                 <div className={styles.field}>
                   <label htmlFor={`${formId}-whatsapp`} className={styles.label}>
-                    WhatsApp com DDD <span className={styles.required}>*</span>
+                    WhatsApp com DDD <span className={styles.req} aria-hidden="true">*</span>
                   </label>
                   <input
                     id={`${formId}-whatsapp`}
-                    type="tel"
                     name="whatsapp"
+                    type="tel"
+                    autoComplete="tel"
+                    required
+                    placeholder="(DDD) 90000-0000"
                     value={formData.whatsapp}
                     onChange={(e) => handleChange("whatsapp", e.target.value)}
-                    placeholder="(21) 98439-3482"
-                    maxLength={16}
-                    className={`${styles.input} ${errors.whatsapp ? styles.hasError : ""}`}
-                    aria-required="true"
                     aria-invalid={!!errors.whatsapp}
-                    aria-describedby={errors.whatsapp ? `${formId}-err-whatsapp` : undefined}
+                    aria-describedby={errors.whatsapp ? `${formId}-whatsapp-error` : undefined}
+                    className={`${styles.input} ${errors.whatsapp ? styles.inputError : ""}`}
                   />
                   {errors.whatsapp && (
-                    <span id={`${formId}-err-whatsapp`} className={styles.errorText} role="alert">
+                    <p id={`${formId}-whatsapp-error`} className={styles.errorText} role="alert">
+                      <Icon name="alert" size={14} />
                       {errors.whatsapp}
-                    </span>
+                    </p>
                   )}
                 </div>
 
-                {/* 3. Nome da empresa */}
-                <div className={styles.field}>
-                  <label htmlFor={`${formId}-empresa`} className={styles.label}>
-                    Nome da empresa <span className={styles.required}>*</span>
-                  </label>
-                  <input
-                    id={`${formId}-empresa`}
-                    type="text"
-                    name="empresa"
-                    value={formData.empresa}
-                    onChange={(e) => handleChange("empresa", e.target.value)}
-                    placeholder="Nome do seu negócio ou instituição"
-                    className={`${styles.input} ${errors.empresa ? styles.hasError : ""}`}
-                    aria-required="true"
-                    aria-invalid={!!errors.empresa}
-                    aria-describedby={errors.empresa ? `${formId}-err-empresa` : undefined}
-                  />
-                  {errors.empresa && (
-                    <span id={`${formId}-err-empresa`} className={styles.errorText} role="alert">
-                      {errors.empresa}
-                    </span>
-                  )}
-                </div>
-
-                {/* 4. Segmento do negócio */}
+                {/* Campo 3: Segmento */}
                 <div className={styles.field}>
                   <label htmlFor={`${formId}-segmento`} className={styles.label}>
-                    Segmento do negócio <span className={styles.required}>*</span>
+                    Segmento da empresa <span className={styles.req} aria-hidden="true">*</span>
                   </label>
-                  <div className={styles.selectWrapper}>
+                  <div className={styles.selectWrap}>
                     <select
                       id={`${formId}-segmento`}
                       name="segmento"
+                      required
                       value={formData.segmento}
                       onChange={(e) => handleChange("segmento", e.target.value)}
-                      className={`${styles.select} ${errors.segmento ? styles.hasError : ""}`}
-                      aria-required="true"
                       aria-invalid={!!errors.segmento}
-                      aria-describedby={errors.segmento ? `${formId}-err-segmento` : undefined}
+                      aria-describedby={errors.segmento ? `${formId}-segmento-error` : undefined}
+                      className={`${styles.select} ${errors.segmento ? styles.inputError : ""}`}
                     >
-                      <option value="">Selecione o segmento...</option>
-                      {FORM.segments.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
+                      <option value="" disabled>
+                        Selecione seu segmento...
+                      </option>
+                      {FORM.segments.map((seg) => (
+                        <option key={seg} value={seg}>
+                          {seg}
                         </option>
                       ))}
                     </select>
                     <Icon name="chevronDown" size={16} className={styles.selectArrow} />
                   </div>
                   {errors.segmento && (
-                    <span id={`${formId}-err-segmento`} className={styles.errorText} role="alert">
+                    <p id={`${formId}-segmento-error`} className={styles.errorText} role="alert">
+                      <Icon name="alert" size={14} />
                       {errors.segmento}
-                    </span>
+                    </p>
                   )}
                 </div>
 
-                {/* 5. Principal objetivo */}
-                <div className={styles.field}>
-                  <label htmlFor={`${formId}-objetivo`} className={styles.label}>
-                    Principal objetivo <span className={styles.required}>*</span>
-                  </label>
-                  <div className={styles.selectWrapper}>
-                    <select
-                      id={`${formId}-objetivo`}
-                      name="objetivo"
-                      value={formData.objetivo}
-                      onChange={(e) => handleChange("objetivo", e.target.value)}
-                      className={`${styles.select} ${errors.objetivo ? styles.hasError : ""}`}
-                      aria-required="true"
-                      aria-invalid={!!errors.objetivo}
-                      aria-describedby={errors.objetivo ? `${formId}-err-objetivo` : undefined}
-                    >
-                      <option value="">Selecione o objetivo principal...</option>
-                      {FORM.objectives.map((o) => (
-                        <option key={o} value={o}>
-                          {o}
-                        </option>
-                      ))}
-                    </select>
-                    <Icon name="chevronDown" size={16} className={styles.selectArrow} />
-                  </div>
-                  {errors.objetivo && (
-                    <span id={`${formId}-err-objetivo`} className={styles.errorText} role="alert">
-                      {errors.objetivo}
-                    </span>
-                  )}
-                </div>
-
-                {/* 6. Situação atual do marketing */}
-                <div className={styles.field}>
-                  <label htmlFor={`${formId}-situacao`} className={styles.label}>
-                    Situação atual do marketing <span className={styles.required}>*</span>
-                  </label>
-                  <div className={styles.selectWrapper}>
-                    <select
-                      id={`${formId}-situacao`}
-                      name="situacao"
-                      value={formData.situacao}
-                      onChange={(e) => handleChange("situacao", e.target.value)}
-                      className={`${styles.select} ${errors.situacao ? styles.hasError : ""}`}
-                      aria-required="true"
-                      aria-invalid={!!errors.situacao}
-                      aria-describedby={errors.situacao ? `${formId}-err-situacao` : undefined}
-                    >
-                      <option value="">Selecione a situação atual...</option>
-                      {FORM.situations.map((st) => (
-                        <option key={st} value={st}>
-                          {st}
-                        </option>
-                      ))}
-                    </select>
-                    <Icon name="chevronDown" size={16} className={styles.selectArrow} />
-                  </div>
-                  {errors.situacao && (
-                    <span id={`${formId}-err-situacao`} className={styles.errorText} role="alert">
-                      {errors.situacao}
-                    </span>
-                  )}
-                </div>
-
-                {/* 7. Faixa de faturamento mensal (opcional) */}
-                <div className={styles.field}>
-                  <label htmlFor={`${formId}-faturamento`} className={styles.label}>
-                    Faturamento mensal <span className={styles.optional}>(opcional)</span>
-                  </label>
-                  <div className={styles.selectWrapper}>
-                    <select
-                      id={`${formId}-faturamento`}
-                      name="faturamento"
-                      value={formData.faturamento}
-                      onChange={(e) => handleChange("faturamento", e.target.value)}
-                      className={styles.select}
-                    >
-                      <option value="">Selecione a faixa (opcional)...</option>
-                      {FORM.revenues.map((r) => (
-                        <option key={r} value={r}>
-                          {r}
-                        </option>
-                      ))}
-                    </select>
-                    <Icon name="chevronDown" size={16} className={styles.selectArrow} />
-                  </div>
-                </div>
-
-                {/* 8. Campo aberto opcional: principal desafio */}
-                <div className={`${styles.field} ${styles.fullWidth}`}>
-                  <label htmlFor={`${formId}-desafio`} className={styles.label}>
-                    Conte brevemente qual é o seu principal desafio hoje{" "}
-                    <span className={styles.optional}>(opcional)</span>
-                  </label>
-                  <textarea
-                    id={`${formId}-desafio`}
-                    name="desafio"
-                    rows={3}
-                    value={formData.desafio}
-                    onChange={(e) => handleChange("desafio", e.target.value)}
-                    placeholder="Ex.: Recebo muitos curiosos no WhatsApp mas pouca gente fecha; ou quero aumentar o número de matrículas no próximo semestre..."
-                    className={styles.textarea}
-                  />
-                </div>
-              </div>
-
-              <div className={styles.footer}>
-                <button type="submit" className="btn btn--primary btn--block">
-                  <Icon name="whatsapp" size={20} />
-                  <span>{FORM.submit}</span>
-                </button>
-
-                <p className={styles.privacyNote}>
-                  {FORM.privacyNote}{" "}
-                  {PRIVACY_POLICY_URL && (
-                    <a href={PRIVACY_POLICY_URL} className={styles.privacyLink}>
+                {/* Botão de envio */}
+                <div className={styles.submitWrap}>
+                  <button type="submit" className={`btn btn--primary btn--block ${styles.submitBtn}`}>
+                    <span>{FORM.submit}</span>
+                    <Icon name="arrowRight" size={18} />
+                  </button>
+                  <p className={styles.microcopy}>
+                    Seus dados serão utilizados para dar continuidade ao contato solicitado. Consulte nossa{" "}
+                    <Link href={PRIVACY_POLICY_URL} className={styles.privacyLink}>
                       Política de Privacidade
-                    </a>
-                  )}
-                </p>
-              </div>
-            </form>
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>

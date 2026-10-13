@@ -1,32 +1,32 @@
 /* ==========================================================================
-   Meta Máxima Digital — tokens e base
-   Mundo visual: documento de planejamento comercial. Papel claro, grafite,
-   linhas finas que organizam o conteúdo e azul reservado para a "linha de
-   conversão", o sinal e a ação principal.
+   Meta Máxima Digital — Sistema de Design, Tipografia e Ritmo Espacial
+   Visual World: Documento de planejamento comercial.
+   Papel claro (#FFFFFF / #F7F9FC), grafite (#111827 / #1F2937),
+   hairlines (#E5E7EB) e azul cobalto (#2563EB / #1D4ED8) para ação.
    ========================================================================== */
 
 :root {
   /* Superfícies */
   --white: #ffffff;
-  --paper: #f7f9fc;
+  --paper: #f8fafc;
   --blue-50: #eff6ff;
   --blue-100: #dbeafe;
   --blue-200: #bfdbfe;
 
-  /* Tinta */
-  --ink: #111827;
-  --ink-soft: #1f2937;
-  --body: #475569; /* parágrafos longos: mais contraste que o secundário */
-  --muted: #64748b;
-  --line: #e5e7eb;
-  --line-strong: #d6dbe3;
+  /* Tinta e Contraste (WCAG 2.2 AA) */
+  --ink: #111827;        /* H1, H2, H3 e ênfases (contraste > 12:1) */
+  --ink-soft: #1f2937;   /* Subtítulos e rótulos de destaque */
+  --body: #374151;       /* Parágrafos e leitura longa (contraste > 7:1) */
+  --muted: #64748b;      /* Metadados, notas e microtextos */
+  --line: #e2e8f0;       /* Hairlines neutras de divisão */
+  --line-strong: #cbd5e1;/* Bordas de campos de formulário e cartões */
 
-  /* Azul de ação */
+  /* Azul de Ação e Conversão */
   --blue: #2563eb;
   --blue-dark: #1d4ed8;
   --blue-ink: #1e3a8a;
 
-  /* Estados */
+  /* Estados e Validação */
   --danger: #b42318;
   --danger-bg: #fef3f2;
   --danger-line: #fecdca;
@@ -34,39 +34,53 @@
   --success-bg: #ecfdf3;
   --success-line: #abefc6;
 
-  /* Tipografia */
+  /* Fontes oficiais */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  --fs-h1: clamp(2.4rem, 1.35rem + 4.1vw, 4.4rem);
-  --fs-h2: clamp(1.95rem, 1.35rem + 2.3vw, 3.25rem);
-  --fs-h3: 1.25rem;
-  --fs-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  /* Escala Tipográfica Fluida */
+  --fs-h1: clamp(2.35rem, 1.45rem + 3.8vw, 4.25rem);
+  --fs-h2: clamp(1.85rem, 1.3rem + 2vw, 3rem);
+  --fs-h3: clamp(1.15rem, 1.05rem + 0.35vw, 1.35rem);
+  --fs-lead: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
   --fs-body: 1.0625rem;
   --fs-small: 0.9375rem;
   --fs-xs: 0.8125rem;
 
-  /* Espaço */
-  --gutter: clamp(20px, 4vw, 40px);
-  --container: 1200px;
-  --section-y: clamp(4.5rem, 2.5rem + 6vw, 8.5rem);
-  --header-h: 68px;
+  /* Escala de Espaçamento Modular (Base 4px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
 
-  /* Forma e profundidade */
+  /* Dimensões de Layout */
+  --gutter: clamp(20px, 4vw, 40px);
+  --container: 1160px;
+  --section-y: clamp(4rem, 2.5rem + 5vw, 7rem);
+  --header-h: 64px;
+
+  /* Forma, Elevação e Bordas */
   --radius-sm: 8px;
   --radius: 12px;
   --radius-lg: 16px;
-  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
-  --shadow-md: 0 1px 2px rgba(17, 24, 39, 0.04), 0 12px 32px -12px rgba(17, 24, 39, 0.14);
-  --shadow-lg: 0 2px 4px rgba(17, 24, 39, 0.04), 0 32px 64px -24px rgba(30, 58, 138, 0.22);
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(17, 24, 39, 0.05), 0 16px 32px -8px rgba(30, 58, 138, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(17, 24, 39, 0.05), 0 24px 48px -12px rgba(30, 58, 138, 0.16);
 
-  /* Movimento */
+  /* Transições e Movimento */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur: 220ms;
+  --dur: 200ms;
 }
 
 /* --------------------------------------------------------------------------
-   Reset enxuto
+   Reset e Base
    -------------------------------------------------------------------------- */
 *,
 *::before,
@@ -77,7 +91,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-top: calc(var(--header-h) + 20px);
   scrollbar-color: var(--line-strong) var(--paper);
 }
 
@@ -93,7 +107,7 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--fs-body);
-  line-height: 1.6;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -153,10 +167,10 @@ a {
   border-radius: 4px;
 }
 
-/* Barra de rolagem (WebKit) */
+/* Barra de rolagem */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
   background: var(--paper);
@@ -164,14 +178,14 @@ a {
 ::-webkit-scrollbar-thumb {
   background: var(--line-strong);
   border-radius: 999px;
-  border: 3px solid var(--paper);
+  border: 2px solid var(--paper);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #b8c0cc;
+  background: #94a3b8;
 }
 
 /* --------------------------------------------------------------------------
-   Utilitários de layout e tipografia
+   Tipografia e Layout Utilitário
    -------------------------------------------------------------------------- */
 .container {
   width: 100%;
@@ -191,17 +205,19 @@ a {
 
 .h1 {
   font-size: var(--fs-h1);
-  font-weight: 600;
-  line-height: 1.02;
+  font-weight: 700;
+  line-height: 1.08;
   letter-spacing: -0.035em;
+  color: var(--ink);
   text-wrap: balance;
 }
 
 .h2 {
   font-size: var(--fs-h2);
-  font-weight: 600;
-  line-height: 1.06;
+  font-weight: 700;
+  line-height: 1.14;
   letter-spacing: -0.03em;
+  color: var(--ink);
   text-wrap: balance;
 }
 
@@ -209,14 +225,15 @@ a {
   font-size: var(--fs-h3);
   font-weight: 600;
   line-height: 1.3;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.018em;
+  color: var(--ink);
 }
 
 .lead {
   font-size: var(--fs-lead);
   line-height: 1.6;
   color: var(--body);
-  max-width: 62ch;
+  max-width: 58ch;
   text-wrap: pretty;
 }
 
@@ -226,9 +243,8 @@ a {
 
 .mono {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
 }
 
 .visually-hidden {
@@ -262,7 +278,7 @@ a {
 }
 
 /* --------------------------------------------------------------------------
-   Botões
+   Botões e Controles de Ação
    -------------------------------------------------------------------------- */
 .btn {
   --btn-h: 52px;
@@ -271,16 +287,16 @@ a {
   justify-content: center;
   gap: 10px;
   min-height: var(--btn-h);
-  padding: 0 22px;
-  border-radius: 10px;
+  padding: 0 24px;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  line-height: 1.2;
+  line-height: 1;
   text-align: center;
   text-decoration: none;
-  white-space: normal;
+  white-space: nowrap;
   transition:
     background-color var(--dur) var(--ease-out),
     border-color var(--dur) var(--ease-out),
@@ -294,21 +310,21 @@ a {
   flex: none;
   width: 18px;
   height: 18px;
-  transition: transform 300ms var(--ease-out);
+  transition: transform var(--dur) var(--ease-out);
 }
 
 .btn--primary {
   background: var(--blue);
   color: var(--white);
   box-shadow:
-    0 1px 2px rgba(17, 24, 39, 0.12),
-    0 10px 24px -10px rgba(37, 99, 235, 0.65);
+    0 1px 2px rgba(17, 24, 39, 0.1),
+    0 8px 20px -6px rgba(37, 99, 235, 0.5);
 }
 .btn--primary:hover {
   background: var(--blue-dark);
   box-shadow:
-    0 1px 2px rgba(17, 24, 39, 0.12),
-    0 14px 28px -10px rgba(29, 78, 216, 0.7);
+    0 1px 2px rgba(17, 24, 39, 0.1),
+    0 12px 24px -6px rgba(29, 78, 216, 0.6);
 }
 .btn--primary:hover svg,
 .btn--secondary:hover svg {
@@ -327,13 +343,13 @@ a {
 .btn--secondary:hover {
   border-color: var(--blue-200);
   color: var(--blue-dark);
-  background: var(--white);
+  background: var(--blue-50);
 }
 
 .btn--sm {
-  --btn-h: 42px;
+  --btn-h: 40px;
   padding: 0 16px;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 
 .btn--block {
@@ -345,22 +361,4 @@ a {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
-}
-
-/* --------------------------------------------------------------------------
-   Revelação de entrada (somente com JS e sem preferência por menos movimento)
-   -------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: no-preference) {
-  .js [data-reveal] {
-    opacity: 0;
-    transform: translateY(18px);
-    transition:
-      opacity 700ms var(--ease-out),
-      transform 900ms var(--ease-out);
-    transition-delay: var(--reveal-delay, 0ms);
-  }
-  .js [data-reveal].is-visible {
-    opacity: 1;
-    transform: none;
-  }
 }

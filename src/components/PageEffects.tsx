@@ -15,7 +15,7 @@ export function PageEffects() {
     const campaign = captureCampaignParams();
     ensureCampaignParamsInUrl(campaign);
 
-    const fire = () => track("landing_view", { has_campaign: Object.keys(campaign).length > 0 });
+    const fire = () => track("page_view", { has_campaign: Object.keys(campaign).length > 0 });
     if (document.readyState === "complete") fire();
     else window.addEventListener("load", fire, { once: true });
 

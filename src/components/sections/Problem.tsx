@@ -1,45 +1,31 @@
 import { PROBLEM } from "@/content/landing";
-import { ScrollCta } from "@/components/ui/ScrollCta";
+import { Icon } from "@/components/ui/Icon";
 import styles from "./Problem.module.css";
 
 export function Problem() {
   return (
-    <section className="section section--paper" aria-labelledby="problema-title">
-      <div className={`container ${styles.grid}`}>
-        <div className={styles.intro}>
-          <h2 id="problema-title" className="h2" data-reveal>
+    <section className={`section section--paper ${styles.section}`} aria-labelledby="problem-title">
+      <div className="container">
+        <div className={styles.header}>
+          <h2 id="problem-title" className="h2">
             {PROBLEM.title}
           </h2>
-          <p className="lead" data-reveal style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
-            {PROBLEM.subtitle}
-          </p>
+          <p className="lead">{PROBLEM.subtitle}</p>
         </div>
 
-        <ol className={styles.leaks} aria-label="Situações comuns entre o investimento e a venda">
-          {PROBLEM.items.map((item, i) => (
-            <li
-              key={item.title}
-              className={styles.card}
-              data-reveal
-              style={{ "--reveal-delay": `${i * 70}ms` } as React.CSSProperties}
-            >
-              <span className={styles.marker} aria-hidden="true" />
-              <p className={`mono ${styles.stage}`}>{item.stage}</p>
-              <h3 className="h3">{item.title}</h3>
-              <p className={styles.text}>{item.text}</p>
+        <ul className={styles.painsList} aria-label="Principais gargalos na captação e conversão de alunos">
+          {PROBLEM.pains.map((pain) => (
+            <li key={pain.title} className={styles.painItem}>
+              <div className={styles.painIconWrap} aria-hidden="true">
+                <Icon name="alert" size={18} />
+              </div>
+              <div className={styles.painContent}>
+                <h3 className={styles.painTitle}>{pain.title}</h3>
+                <p className={styles.painText}>{pain.text}</p>
+              </div>
             </li>
           ))}
-        </ol>
-      </div>
-
-      <div className="container">
-        <div className={styles.closing} data-reveal>
-          <p className={styles.closingText}>
-            O próximo passo não é simplesmente investir mais.{" "}
-            <span className="accent">É entender onde sua operação pode melhorar.</span>
-          </p>
-          <ScrollCta location="problem">{PROBLEM.cta}</ScrollCta>
-        </div>
+        </ul>
       </div>
     </section>
   );

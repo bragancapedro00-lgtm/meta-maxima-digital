@@ -1,0 +1,126 @@
+.section {
+  background: var(--white);
+}
+
+.header {
+  max-width: 64ch;
+  margin-bottom: clamp(2.5rem, 1.75rem + 2.5vw, 4rem);
+}
+
+.header h2 {
+  margin-bottom: 14px;
+}
+
+.stepsRail {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  position: relative;
+  margin-bottom: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.stepNode {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+  transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+
+.stepItem:hover .stepNode {
+  border-color: var(--blue-200);
+  background: var(--blue-50);
+  box-shadow: 0 0 0 3px var(--blue-50);
+}
+
+.stepNum {
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.connector {
+  position: absolute;
+  top: 22px;
+  right: calc(100% - 22px);
+  width: calc(100% - 24px);
+  height: 1px;
+  background: var(--line);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.stepBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stepName {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.stepDesc {
+  font-size: 0.9375rem;
+  color: var(--body);
+  line-height: 1.6;
+}
+
+.ctaWrap {
+  display: flex;
+  align-items: center;
+  padding-top: 8px;
+}
+
+@media (max-width: 960px) {
+  .stepsRail {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px 24px;
+  }
+
+  .connector {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .stepsRail {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .stepItem {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .stepNode {
+    flex: none;
+  }
+
+  .ctaWrap > a {
+    width: 100%;
+    justify-content: center;
+  }
+}

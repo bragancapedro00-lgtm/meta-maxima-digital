@@ -119,6 +119,19 @@ fbq('track', 'PageView');`,
           </noscript>
         )}
 
+        {pixelId && (
+          <noscript>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              height="1"
+              width="1"
+              style={{ display: "none" }}
+              alt=""
+              src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
+            />
+          </noscript>
+        )}
+
         <a href="#conteudo-principal" className="skip-link">
           Pular para o conteúdo principal
         </a>

@@ -1,17 +1,17 @@
 .hero {
   position: relative;
-  padding-top: calc(var(--header-h) + clamp(2.5rem, 1rem + 5vw, 5.5rem));
-  padding-bottom: clamp(4rem, 2rem + 6vw, 7.5rem);
+  padding-top: calc(var(--header-h) + clamp(2rem, 1.25rem + 3.5vw, 4.5rem));
+  padding-bottom: clamp(3.5rem, 2rem + 4.5vw, 6.5rem);
   background:
-    radial-gradient(60% 55% at 82% 38%, var(--blue-50) 0%, rgba(239, 246, 255, 0) 70%),
-    linear-gradient(180deg, var(--white) 0%, var(--white) 70%, var(--paper) 100%);
+    radial-gradient(65% 60% at 88% 28%, var(--blue-50) 0%, rgba(239, 246, 255, 0) 70%),
+    linear-gradient(180deg, var(--white) 0%, var(--white) 75%, var(--paper) 100%);
   overflow: clip;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: clamp(2.5rem, 1rem + 5vw, 5rem);
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.92fr);
+  gap: clamp(2rem, 1.25rem + 4vw, 4.5rem);
   align-items: center;
 }
 
@@ -22,108 +22,252 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 28px;
+  gap: 8px;
+  margin-bottom: 20px;
   padding: 6px 14px 6px 10px;
   border: 1px solid var(--blue-100);
   border-radius: 999px;
   background: var(--white);
   color: var(--blue-dark);
+  font-family: var(--font-mono);
   font-size: var(--fs-xs);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  line-height: 1;
 }
 
 .badgeDot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--blue);
   box-shadow: 0 0 0 3px var(--blue-100);
 }
 
 .title {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  text-wrap: balance;
 }
 
 .subtitle {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
+  font-size: var(--fs-lead);
+  line-height: 1.6;
+  color: var(--body);
+  max-width: 54ch;
+  text-wrap: pretty;
 }
 
-.benefits {
-  display: grid;
-  gap: 14px;
-  margin-bottom: 36px;
-}
-
-.benefits li {
+.actionWrap {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  font-weight: 500;
-  color: var(--ink-soft);
-  line-height: 1.4;
-}
-
-.benefitIcon {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  background: var(--blue-50);
-  color: var(--blue);
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.ctaBtn {
+  font-size: 1.0625rem;
+  padding: 0 32px;
+  min-height: 54px;
 }
 
 .micro {
-  max-width: 50ch;
-  font-size: var(--fs-small);
-  line-height: 1.55;
+  font-size: 0.875rem;
+  line-height: 1.5;
   color: var(--muted);
 }
 
+.quickProof {
+  margin-top: 4px;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.proofHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.proofIcon {
+  color: var(--blue);
+}
+
+.proofTag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proofText {
+  font-size: 0.9375rem;
+  color: var(--body);
+  line-height: 1.55;
+}
+
+/* Visual Companion Card */
 .visual {
   position: relative;
   min-width: 0;
 }
 
-@media (max-width: 1023px) {
+.visualCard {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+}
+
+.visualHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+
+.visualTitle {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+.visualBadge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  background: var(--blue-50);
+  color: var(--blue-dark);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--blue-100);
+}
+
+.journeyFlow {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.flowItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.flowItemHighlight {
+  background: var(--blue-50);
+  border-color: var(--blue-200);
+}
+
+.flowNode {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.flowItemHighlight .flowNode {
+  background: var(--blue);
+  color: var(--white);
+  border-color: var(--blue);
+}
+
+.flowContent {
+  flex: 1;
+}
+
+.flowTitle {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.flowDesc {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-top: 3px;
+}
+
+.visualFooter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.visualFooter svg {
+  color: var(--blue);
+}
+
+@media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;
-  }
-  .copy {
-    max-width: 680px;
+    gap: 36px;
   }
   .visual {
-    max-width: 620px;
+    order: 2;
   }
 }
 
 @media (max-width: 560px) {
+  .hero {
+    padding-top: calc(var(--header-h) + 1.25rem);
+    padding-bottom: 3.25rem;
+  }
   .badge {
-    margin-bottom: 22px;
+    margin-bottom: 14px;
     font-size: 0.6875rem;
-    letter-spacing: 0.05em;
   }
-  .actions {
-    flex-direction: column;
+  .title {
+    margin-bottom: 16px;
   }
-  .actions > a {
+  .subtitle {
+    margin-bottom: 22px;
+  }
+  .actionWrap {
     width: 100%;
   }
-  .benefits li {
-    align-items: flex-start;
+  .ctaBtn {
+    width: 100%;
+    justify-content: center;
   }
-  .benefitIcon {
-    margin-top: -6px;
+  .visual {
+    display: none;
   }
 }
